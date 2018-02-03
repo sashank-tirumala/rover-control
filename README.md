@@ -22,7 +22,7 @@ source devel/setup.bash
 + Akshay Molawade
 + Sankalp Chapalgaonkar
 + Aniket More
-+ Gaurav Tonape
++ hello
 
 ### Software Team
 + Avinash Kori
