@@ -18,7 +18,7 @@ source devel/setup.bash
 
 ## Members
 ### Electrical Team
-+ Sourya Varenya
++ Sarin John
 + Akshay Molawade
 + Sankalp Chapalgaonkar
 + Aniket More
