@@ -2,8 +2,9 @@
 #include <ros.h>
 #include <rover_msgs/WheelVelocity.h>
 #include <rover_msgs/Arm.h>
-#include <avr/wdt.h>
+#include <avr/wdt.h> // Code to reset the arduino
 
+/*** All definitions here ***/
 #define dir1 33
 #define pwm1 9
 #define dir2 31
@@ -17,18 +18,15 @@
 #define dir6 23
 #define pwm6 4
 
-
-
-
-
-float left=0,right=0; 
 int reset_flag;
-
-ros::NodeHandle nh;
-
+float left=0,right=0;
 
 /*rover_msgs::WheelVelocity RoverVel;
 ros::Publisher vel_pub("rover1/wheel", &RoverVel);*/
+ros::Subscriber<rover_msgs::WheelVelocity> locomotion_sub("rover1/wheel_vel", &roverMotionCallback);
+ros::NodeHandle nh;
+/*** DEFINITIONS END ***/
+
 
 void loco(int vel,int dir_pin,int pwm_pin)
 {
@@ -38,71 +36,52 @@ if(vel<=0)
    analogWrite(pwm_pin,abs(vel));
   }
 else
-  { 
+  {
     digitalWrite(dir_pin,HIGH);
     analogWrite(pwm_pin,abs(vel));
   }
-   
-  
 }
 
 
 
 
-void roverMotionCallback(const rover_msgs::WheelVelocity& RoverVelocity){
-
-  
-
-  
+void roverMotionCallback(const rover_msgs::WheelVelocity& RoverVelocity)
+{
+  /*** map is a function that changes the range of a value 0-255 can be mapped to 6 -12 and so ***/
   left = map(RoverVelocity.left,-70,70,-150,150);
   right = map(RoverVelocity.right,-70,70,-150,150);
+  /*** END ***/
   
-
-  
-   if(RoverVelocity.reset_flag==1) reset_flag=1;
-   
- 
-
+   if(RoverVelocity.reset_flag==1)
+   {
+     reset_flag=1;
+   }
   loco(left,dir1,pwm1);
   loco(-right,dir2,pwm2);//Wheels were running in the oppposite direction
   loco(left,dir3,pwm3);
   loco(-right,dir4,pwm4);//Wheels were running in the oppposite direction
   loco(left,dir5,pwm5);
   loco(right,dir6,pwm6);
-
-
-  
   /*RoverVel.left=left;
   RoverVel.right=right;
-  
-  vel_pub.publish(&RoverVel);*/
-   
-  
- }
- 
- 
 
- 
- ros::Subscriber<rover_msgs::WheelVelocity> locomotion_sub("rover1/wheel_vel", &roverMotionCallback);
- 
- 
- void setup(){
+  vel_pub.publish(&RoverVel);*/
+ }
+
+void setup()
+{
    nh.initNode();
- 
    nh.subscribe(locomotion_sub);
    //nh.advertise(vel_pub);
-   
    wdt_disable();
    wdt_enable(WDTO_8S);
-  
- 
+
    pinMode(dir1,OUTPUT);
    pinMode(dir2,OUTPUT);
    pinMode(dir3,OUTPUT);
    pinMode(dir4,OUTPUT);
    pinMode(dir5,OUTPUT);
-   pinMode(dir6,OUTPUT); 
-  
+   pinMode(dir6,OUTPUT);
    pinMode(pwm1,OUTPUT);
    pinMode(pwm2,OUTPUT);
    pinMode(pwm3,OUTPUT);
@@ -110,16 +89,17 @@ void roverMotionCallback(const rover_msgs::WheelVelocity& RoverVelocity){
    pinMode(pwm5,OUTPUT);
    pinMode(pwm6,OUTPUT);
 
-  
-   
  }
- 
+
  void loop(){
-   
-    
-   if(reset_flag==1)  wdt_reset();
+
+
+   if(reset_flag==1)
+   {
+     wdt_reset();
+   }
    reset_flag=0;
- 
+
    nh.spinOnce();
    delay(1);
 }
