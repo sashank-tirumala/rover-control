@@ -51,7 +51,7 @@ void roverMotionCallback(const rover_msgs::WheelVelocity& RoverVelocity)
   left = map(RoverVelocity.left,-70,70,-150,150);
   right = map(RoverVelocity.right,-70,70,-150,150);
   /*** END ***/
-  
+
    if(RoverVelocity.reset_flag==1)
    {
      reset_flag=1;
