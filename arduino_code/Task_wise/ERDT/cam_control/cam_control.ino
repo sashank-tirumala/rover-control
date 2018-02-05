@@ -17,21 +17,21 @@ ros::NodeHandle nh;
 //Callback funtion for the working of the camera
 void cameraMotionCallback(const rover_msgs::CameraMotion& CameraVelocity){
   //nh.loginfo("CameraVelocity.A_button");
-  
+
   if(CameraVelocity.X_button)
       if(yaw_initial > 180)
             yaw_initial = 180;
-      else 
+      else
             yaw_initial = yaw_initial + 2;
-            
+
   if(CameraVelocity.B_button)
       if(yaw_initial < 0)
                   yaw_initial = 0;
-      else 
+      else
             yaw_initial = yaw_initial - 2;
-  
+
     mainCameraYaw.write(yaw_initial);
-   
+
 }
 
 //creating a subscriber for the topic river1/camera_dir
@@ -47,7 +47,7 @@ void setup(){
 
   wdt_disable();
   wdt_enable(WDTO_8S);
-  
+
 }
 
 void loop(){
