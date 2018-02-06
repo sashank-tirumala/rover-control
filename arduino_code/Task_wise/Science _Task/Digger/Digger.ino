@@ -1,3 +1,4 @@
+/* Come Back to this later */
 #include<ros.h>
 #include<rover_msgs/digger.h>
 #include <avr/wdt.h>
@@ -30,11 +31,9 @@ int reset_flag;
 ros::NodeHandle nh;
 ros::Subscriber<rover_msgs::digger> sub("dig", &CallBack);
 /*** DEFINITIONS END HERE ***/
+
 void CallBack(const rover_msgs::digger& D)
 {
-
-
-
   if((D.Step_UD_step)==1 )
   {
 
@@ -91,25 +90,22 @@ void CallBack(const rover_msgs::digger& D)
 
     if((D.probe_step)==1)
    {
-    if((D.probe_dir)==1)
-    {
+     if((D.probe_dir)==1)
+     {
       digitalWrite(Step_probe_dir, HIGH);
-    }
-    if((D.probe_dir)==-1)
-    {
+     }
+     if((D.probe_dir)==-1)
+     {
       digitalWrite(Step_probe_dir, LOW);
-    }
+     }
 
-
-
-    for(int i=0;i<50;i++)
-    {
-      digitalWrite(Step_probe_step,HIGH);
-      delayMicroseconds(delay3);
-      digitalWrite(Step_probe_step,LOW);
-      delayMicroseconds(delay3);
-
-    }
+     for(int i=0;i<50;i++)
+     {
+       digitalWrite(Step_probe_step,HIGH);
+       delayMicroseconds(delay3);
+       digitalWrite(Step_probe_step,LOW);
+       delayMicroseconds(delay3);
+     }
 
     }
 

@@ -31,7 +31,7 @@ void cameraMotionCallback(const rover_msgs::CameraMotion& CameraVelocity)
   {
       if(yaw_initial < 0)
       {
-        yaw_initial = 0;
+        yaw_initial = 0;S
       }
       else
       {
